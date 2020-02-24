@@ -10,7 +10,7 @@ const registerValidationSchema = data => {
     password: Joi.string().min(7).alphanum().required(),
   });
 
-  return schema.validate(data);
+  return schema.validate(data, { abortEarly: false });
 };
 
 // User login validation schema
@@ -20,7 +20,7 @@ const loginValidationSchema = data => {
     password: Joi.string().min(7).alphanum().required(),
   });
 
-  return schema.validate(data);
+  return schema.validate(data, { abortEarly: false });
 };
 
 module.exports = {
