@@ -3,7 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('./../model/User');
-const collectErrors = require('../helpers/collectErrors').default;
+const collectErrors = require('../helpers/collectErrors').collectErrors;
+const customErrors = require('../helpers/collectErrors').customErrors;
+
 const { registerValidationSchema, loginValidationSchema } = require('../helpers/validation');
 
 router.post('/register', async (req, res) => {
@@ -21,14 +23,7 @@ router.post('/register', async (req, res) => {
   });
 
   if (emailExists) {
-    return res.status(422).send({
-      validationErrors: [
-        {
-          "field": "email",
-          "message": "Email already exists"
-        }
-      ]
-    });
+    return res.status(422).send(customErrors([{ field: "email", message: "Email already exists" }]));
   }
 
   // Hash Passwords
@@ -65,27 +60,13 @@ router.post('/login', async (req, res) => {
   });
 
   if (!user) {
-    return res.status(422).send({
-      validationErrors: [
-        {
-          "field": "email",
-          "message": "Email/Password not valid"
-        }
-      ]
-    });
+    return res.status(422).send(customErrors([{ field: "email", message: "Email/Password not valid" }]));
   }
 
   const validPass = await bcrypt.compare(req.body.password, user.password);
 
   if(!validPass) {
-    return res.status(422).send({
-      validationErrors: [
-        {
-          "field": "password",
-          "message": "Email/Password not valid"
-        }
-      ]
-    });
+    return res.status(422).send(customErrors([{ field: "email", message: "Email/Password not valid" }]));
   }
 
   const { _id, name, email } = user;

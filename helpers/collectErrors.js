@@ -9,4 +9,15 @@ const collectErrors = data => {
   }
 }
 
-module.exports = collectErrors;
+const customErrors = data => {
+  return {
+    validationErrors: customErrors.map(error => {
+      return {
+        "field": error.field,
+        "message": error.message
+      }
+    })
+  }
+}
+
+module.exports = { collectErrors, customErrors };

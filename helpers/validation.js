@@ -23,8 +23,24 @@ const loginValidationSchema = data => {
   return schema.validate(data, { abortEarly: false });
 };
 
+// Post create validation schema
+const postCreateValidationSchema = data => {
+  const schema = Joi.object({
+    title: Joi.string().min(8).required(),
+    description: Joi.string().min(7).required(),
+    image: Joi.any()
+              .meta({swaggerType: 'file'})
+              .optional()
+              .allow('')
+              .description('image file'),
+  });
+
+  return schema.validate(data, { abortEarly: false });
+}
+
 module.exports = {
   registerValidationSchema,
   loginValidationSchema,
+  postCreateValidationSchema,
 }
 
